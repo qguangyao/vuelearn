@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        数学：<input type="text" v-model="mathScore"><br>
+        英语：<input type="text" v-model="EnglishScore"><br>
+        总得分：<input type="text" v-model="sumScore()"><br>
+        总得分计算属性：<input type="text" v-model="sumScore1"><br>
+        总得分双向绑定：<input type="text" v-model="sumScore2"><br>
+        总得分监听器： <input type="text" v-model="sumScore3">
+    </div>
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script>
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                mathScore: 80,
+                EnglishScore: 90,
+                sumScore3: 0
+            },
+            methods: {
+                sumScore: function () {
+                    return this.mathScore + this.EnglishScore;
+                }
+            },
+            computed: {
+                sumScore1: function () {
+                    return (this.mathScore - 0) + (this.EnglishScore - 0);
+                },
+                sumScore2: {
+                    get: function () {
+                        return (this.mathScore - 0) + (this.EnglishScore - 0);
+                    },
+                    set: function (newValue) {
+                        this.mathScore = newValue / 2;
+                        this.EnglishScore = newValue / 2;
+                    }
+                },
+            }, 
+            watch: {
+                mathScore: function (newValue, oldValue) {
+                    this.sumScore3 = (newValue - 0) + (this.EnglishScore - 0);
+                }
+            }
+        });
+        vm.$watch('EnglishScore',function(newValue){
+            this.sumScore3 = (newValue - 0) + (this.mathScore - 0);
+        });
+        vm.$watch('sumScore3',function(newValue){
+            let avg = newValue/2;
+            this.mathScore = avg;
+            this.EnglishScore = avg;
+        });
+    </script>
+</body>
+
+</html>
